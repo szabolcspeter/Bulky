@@ -30,6 +30,11 @@ namespace BulkyWeb.Controllers
                 ModelState.AddModelError("name", "The Diaplay Order can not match the Name");
             }
 
+            if (category.Name?.ToLower() == "test")
+            {
+                ModelState.AddModelError("", "Test is invalid value.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Categories.Add(category);
