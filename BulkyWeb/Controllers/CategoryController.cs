@@ -43,5 +43,46 @@ namespace BulkyWeb.Controllers
             }
             return View();
         }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var categoryFromDb = _context.Categories.Find(id);
+            var categoryFromDb1 = _context.Categories.FirstOrDefault(u => u.Id == id);
+            var categoryFromDb2 = _context.Categories.Where(u => u.Id == id).FirstOrDefault();
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Category category)
+        {
+            if (category.Name == category.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("name", "The Diaplay Order can not match the Name");
+            }
+
+            if (category.Name?.ToLower() == "test")
+            {
+                ModelState.AddModelError("", "Test is invalid value.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
     }
 }
